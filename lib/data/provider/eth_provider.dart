@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:wakucoin/data/models/transaction_history.dart';
 import 'package:web3dart/web3dart.dart';
 import '../../core/constants.dart';
 
@@ -17,6 +18,7 @@ class ETHProvider extends ChangeNotifier {
   EthereumAddress? addressfromHex;
   String addressfromString = '';
   double currentBalance = 0;
+  TransactionHistory? transactionHistory;
 
   String receiverAddress = '';
   double receiverBalance = 0;
@@ -133,6 +135,34 @@ class ETHProvider extends ChangeNotifier {
     return result;
   }
 
+  Future<void> getTransactionHistory(String address, String network) async {
+    if (network != 'Mainnet') {
+      network = '-${network.toLowerCase()}';
+    } else {
+      network = '';
+    }
+    String api = 'https://api$network.etherscan.io/api'
+        '?module=account'
+        '&action=txlist'
+        '&address=$address'
+        '&startblock=0'
+        '&endblock=99999999'
+        '&page=1'
+        '&offset=10'
+        '&sort=desc'
+        '&apikey=${EnvironmentVariables.apiKeyEtherScan}';
+    debugPrint(api);
+    Uri uri = Uri.parse(api);
+    Response response = await httpClient.get(uri);
+    if (response.statusCode == 200) {
+      debugPrint(response.body);
+      transactionHistory = transactionHistoryFromJson(response.body);
+    } else {
+      debugPrint('Error: ${response.statusCode}');
+    }
+    notifyListeners();
+  }
+
   void reset() {
     signInSuccess = false;
     isLoadingBalance = true;
@@ -140,6 +170,7 @@ class ETHProvider extends ChangeNotifier {
     addressfromHex = null;
     addressfromString = '';
     currentBalance = 0;
+    transactionHistory = null;
     resetReceiver();
     initProvider();
     notifyListeners();
@@ -149,7 +180,7 @@ class ETHProvider extends ChangeNotifier {
     receiverAddress = '';
     receiverBalance = 0;
     amount = 0;
-    gasFee = EtherAmount.zero(); //* gas fee per unit
+    gasFee = EtherAmount.zero();
     totalFee = BigInt.zero;
     finalValue = BigInt.zero;
     notifyListeners();

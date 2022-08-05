@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:wakucoin/core/constants.dart';
 import 'package:wakucoin/data/provider/dashboard_provider.dart';
 import 'package:wakucoin/data/provider/eth_provider.dart';
 
@@ -15,6 +16,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     Provider.of<ETHProvider>(context, listen: false).getBalance();
+    Provider.of<ETHProvider>(context, listen: false).getTransactionHistory(
+        Provider.of<ETHProvider>(context, listen: false).addressfromString,
+        EnvironmentVariables.listChainIDMap.keys.firstWhere((element) =>
+            EnvironmentVariables.listChainIDMap[element] ==
+            int.parse(Provider.of<ETHProvider>(context, listen: false)
+                .currentChainID
+                .toString())));
     //Provider.of<MetaMaskProvider>(context, listen: false).autoRefresh();
     super.initState();
   }

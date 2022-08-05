@@ -24,4 +24,6 @@ class EnvironmentVariables {
     'Goerli',
     'Kovan',
   ];
+  // ! API Key Leak 👀
+  static const apiKeyEtherScan = '47HTG6B1AZAJEQKUEW9RXP86QD7FBN4VZD';
 }

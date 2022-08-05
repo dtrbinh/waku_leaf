@@ -54,6 +54,18 @@ Widget settings(BuildContext context) {
                   onChanged: (newNetwork) {
                     Provider.of<ETHProvider>(context, listen: false)
                         .changeNetwork(newNetwork.toString());
+                    Provider.of<ETHProvider>(context, listen: false)
+                        .getTransactionHistory(
+                            Provider.of<ETHProvider>(context, listen: false)
+                                .addressfromString,
+                            EnvironmentVariables.listChainIDMap.keys.firstWhere(
+                                (element) =>
+                                    EnvironmentVariables
+                                        .listChainIDMap[element] ==
+                                    int.parse(Provider.of<ETHProvider>(context,
+                                            listen: false)
+                                        .currentChainID
+                                        .toString())));
                   });
             },
           ),

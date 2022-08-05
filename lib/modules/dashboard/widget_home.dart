@@ -5,6 +5,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:wakucoin/core/constants.dart';
 import 'package:wakucoin/data/provider/dashboard_provider.dart';
 import 'package:wakucoin/data/provider/eth_provider.dart';
+import 'package:wakucoin/modules/history/history_screen.dart';
 import 'package:wakucoin/modules/sign_in/sign_in_screen.dart';
 
 Widget home(BuildContext context) {
@@ -41,7 +42,10 @@ Widget home(BuildContext context) {
                   fontWeight: FontWeight.bold,
                   color: Colors.green)),
           const SizedBox(height: 20),
-          ElevatedButton(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
                   onPressed: () {
                     Provider.of<ETHProvider>(context, listen: false).reset();
                     Provider.of<DashBoardProvider>(context, listen: false)
@@ -52,8 +56,31 @@ Widget home(BuildContext context) {
                       },
                     ));
                   },
-                  child: const Text('Sign Out'))
-              .centered()
+                  child: const Text('Sign Out')),
+              const SizedBox(width: 20),
+              ElevatedButton(
+                  onPressed: () {
+                    Provider.of<ETHProvider>(context, listen: false)
+                        .getTransactionHistory(
+                            Provider.of<ETHProvider>(context, listen: false)
+                                .addressfromString,
+                            EnvironmentVariables.listChainIDMap.keys.firstWhere(
+                                (element) =>
+                                    EnvironmentVariables
+                                        .listChainIDMap[element] ==
+                                    int.parse(Provider.of<ETHProvider>(context,
+                                            listen: false)
+                                        .currentChainID
+                                        .toString())));
+                    Navigator.push(context, CupertinoPageRoute(
+                      builder: (context) {
+                        return const HistoryScreen();
+                      },
+                    ));
+                  },
+                  child: const Text('Transaction History')),
+            ],
+          ),
         ],
       ),
     ),
