@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -23,7 +25,7 @@ Widget sendETH(BuildContext context) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            'Transaction information',
+            'Transaction Information',
             style: TextStyle(
                 fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
           ),
@@ -72,6 +74,10 @@ Widget sendETH(BuildContext context) {
             children: [
               ElevatedButton(
                   onPressed: () {
+                    Provider.of<ETHProvider>(context, listen: false)
+                        .estimateTotalFee(
+                            Provider.of<ETHProvider>(context, listen: false)
+                                .amount);
                     showDialog(
                         context: context,
                         builder: (context) {
@@ -79,7 +85,7 @@ Widget sendETH(BuildContext context) {
                             title: const Text('Confirm'),
                             content: SizedBox(
                               width: context.screenWidth * 70 / 100,
-                              height: context.screenWidth * 25 / 100,
+                              height: context.screenWidth * 40 / 100,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,6 +101,13 @@ Widget sendETH(BuildContext context) {
                                     'Amount: ${Provider.of<ETHProvider>(context, listen: false).amount}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Transaction fee: ${Provider.of<ETHProvider>(context, listen: false).totalFee / BigInt.from(pow(10, 18))}.',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red),
                                   ),
                                 ],
                               ),
@@ -140,13 +153,18 @@ Widget sendETH(BuildContext context) {
                     showDialog(
                         context: context,
                         builder: (context) {
+                          Provider.of<ETHProvider>(context, listen: false)
+                              .estimateTotalFee(Provider.of<ETHProvider>(
+                                      context,
+                                      listen: false)
+                                  .currentBalance);
                           return AlertDialog(
                             title: const Text(
                               'Confirm',
                             ),
                             content: SizedBox(
                               width: context.screenWidth * 70 / 100,
-                              height: context.screenWidth * 40 / 100,
+                              height: context.screenWidth * 50 / 100,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,12 +183,18 @@ Widget sendETH(BuildContext context) {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 5),
-                                  const Text(
-                                    'Because of gas fee, receiver cannot receive all of the amount.',
-                                    style: TextStyle(
+                                  Text(
+                                    'Transaction fee: ${Provider.of<ETHProvider>(context, listen: false).totalFee / BigInt.from(pow(10, 18))}.',
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.red),
                                   ),
+                                  Text(
+                                    'Final amoumt: ${Provider.of<ETHProvider>(context, listen: false).finalValue / BigInt.from(pow(10, 18))}.',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red),
+                                  )
                                 ],
                               ),
                             ),

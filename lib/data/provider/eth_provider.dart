@@ -22,6 +22,10 @@ class ETHProvider extends ChangeNotifier {
   double receiverBalance = 0;
   double amount = 0;
 
+  EtherAmount gasFee = EtherAmount.zero(); //* gas fee per unit
+  BigInt totalFee = BigInt.zero;
+  BigInt finalValue = BigInt.zero; // * final eth receiver will receive
+
   void autoRefresh() {
     Timer.periodic(const Duration(seconds: 3), (timer) {
       getBalance();
@@ -84,12 +88,13 @@ class ETHProvider extends ChangeNotifier {
 
   // ! Increase gasFee for better perform transaction.
   Future<String> sendETH(String toAddress, double value) async {
-    var gasFee = await web3Client.getGasPrice();
+    gasFee = await web3Client.getGasPrice();
     var result = await web3Client.sendTransaction(
       credentials!,
       Transaction(
         maxGas: 21000,
-        gasPrice: EtherAmount.inWei(gasFee.getInWei * BigInt.from(2) - BigInt.one),
+        gasPrice:
+            EtherAmount.inWei(gasFee.getInWei * BigInt.from(2) - BigInt.one),
         to: EthereumAddress.fromHex(toAddress),
         value: EtherAmount.fromUnitAndValue(
             EtherUnit.wei, BigInt.from(value * pow(10, 18))),
@@ -100,15 +105,17 @@ class ETHProvider extends ChangeNotifier {
     return result;
   }
 
-  Future<String> sendAllETH(String toAddress, double value) async {
-    var gasFee = await web3Client.getGasPrice();
-    var totalFee = BigInt.from(21000) * gasFee.getInWei * BigInt.from(2);
-    var finalValue = BigInt.from(value * pow(10, 18)) - totalFee;
+  Future<void> estimateTotalFee(double value) async {
+    gasFee = await web3Client.getGasPrice();
+    totalFee = BigInt.from(21000) * gasFee.getInWei * BigInt.from(2);
+    finalValue = BigInt.from(value * pow(10, 18)) - totalFee;
 
     debugPrint('Gas fee per unit: $gasFee');
     debugPrint('Total fee(x2 than base fee): $totalFee');
     debugPrint('Final value: $finalValue');
+  }
 
+  Future<String> sendAllETH(String toAddress, double value) async {
     var result = await web3Client.sendTransaction(
       credentials!,
       Transaction(
@@ -132,9 +139,7 @@ class ETHProvider extends ChangeNotifier {
     addressfromHex = null;
     addressfromString = '';
     currentBalance = 0;
-    receiverAddress = '';
-    receiverBalance = 0;
-    amount = 0;
+    resetReceiver();
     initProvider();
     notifyListeners();
   }
@@ -143,6 +148,9 @@ class ETHProvider extends ChangeNotifier {
     receiverAddress = '';
     receiverBalance = 0;
     amount = 0;
+    gasFee = EtherAmount.zero(); //* gas fee per unit
+    totalFee = BigInt.zero;
+    finalValue = BigInt.zero;
     notifyListeners();
   }
 }

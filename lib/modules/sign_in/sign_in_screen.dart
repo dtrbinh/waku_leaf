@@ -22,7 +22,8 @@ class _SignInScreenState extends State<SignInScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: context.screenHeight * 10 / 100),
+          const Spacer(),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -37,8 +38,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: Colors.green))
             ],
           ),
-          SizedBox(height: context.screenHeight * 10 / 100),
-          const SizedBox(height: 20),
+          SizedBox(height: context.screenHeight * 20 / 100),
           SizedBox(
             width: context.screenWidth * 90 / 100,
             height: context.screenHeight * 10 / 100,
@@ -54,7 +54,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     fontWeight: FontWeight.normal,
                     color: Colors.grey),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Colors.green,
+                    width: 2,
+                  ),
                 ),
               ),
               onChanged: (value) {
@@ -90,7 +97,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 } else {}
                 FocusScope.of(context).unfocus();
               },
-              child: 'Sign in'.text.xl2.bold.white.make()),
+              child: const Text('Sign In')),
+          const Spacer(),
+          const Text('dtrbinh', style: TextStyle(color: Colors.grey)),
+          const SizedBox(height: 20),
         ],
       ),
     );
