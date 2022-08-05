@@ -113,6 +113,7 @@ class ETHProvider extends ChangeNotifier {
     debugPrint('Gas fee per unit: $gasFee');
     debugPrint('Total fee(x2 than base fee): $totalFee');
     debugPrint('Final value: $finalValue');
+    notifyListeners();
   }
 
   Future<String> sendAllETH(String toAddress, double value) async {

@@ -93,21 +93,25 @@ Widget sendETH(BuildContext context) {
                                   const Text(
                                       'Are you sure to send this transaction?'),
                                   Text(
-                                    'Receiver: ${Provider.of<ETHProvider>(context, listen: false).receiverAddress}',
+                                    'Receiver: ${Provider.of<ETHProvider>(context, listen: true).receiverAddress}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    'Amount: ${Provider.of<ETHProvider>(context, listen: false).amount}',
+                                    'Amount: ${Provider.of<ETHProvider>(context, listen: true).amount}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 5),
-                                  Text(
-                                    'Transaction fee: ${Provider.of<ETHProvider>(context, listen: false).totalFee / BigInt.from(pow(10, 18))}.',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red),
+                                  Consumer<ETHProvider>(
+                                    builder: (context, value, child) {
+                                      return Text(
+                                        'Transaction fee: ${Provider.of<ETHProvider>(context, listen: true).totalFee / BigInt.from(pow(10, 18))}.',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -183,17 +187,25 @@ Widget sendETH(BuildContext context) {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 5),
-                                  Text(
-                                    'Transaction fee: ${Provider.of<ETHProvider>(context, listen: false).totalFee / BigInt.from(pow(10, 18))}.',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red),
+                                  Consumer(
+                                    builder: (context, value, child) {
+                                      return Text(
+                                        'Transaction fee: ${Provider.of<ETHProvider>(context, listen: true).totalFee / BigInt.from(pow(10, 18))}.',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red),
+                                      );
+                                    },
                                   ),
-                                  Text(
-                                    'Final amoumt: ${Provider.of<ETHProvider>(context, listen: false).finalValue / BigInt.from(pow(10, 18))}.',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red),
+                                  Consumer(
+                                    builder: (context, value, child) {
+                                      return Text(
+                                        'Final amoumt: ${Provider.of<ETHProvider>(context, listen: true).finalValue / BigInt.from(pow(10, 18))}.',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red),
+                                      );
+                                    },
                                   )
                                 ],
                               ),
