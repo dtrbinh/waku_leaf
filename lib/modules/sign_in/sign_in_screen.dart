@@ -13,6 +13,11 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   String privatekey = '';
   @override
   Widget build(BuildContext context) {

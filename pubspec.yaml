@@ -39,6 +39,8 @@ dependencies:
   velocity_x: ^3.5.1
   flutter_launcher_icons: ^0.9.3
   provider: ^6.0.3
+  device_preview: ^1.1.0
+  flutter_native_splash: ^2.2.7
 
 dev_dependencies:
   flutter_test:
