@@ -39,10 +39,10 @@ Widget settings(BuildContext context) {
                   value: EnvironmentVariables.listChainIDMap.keys.firstWhere(
                       (element) =>
                           EnvironmentVariables.listChainIDMap[element] ==
-                          int.parse(
-                              Provider.of<ETHProvider>(context, listen: true)
-                                  .currentChainID
-                                  .toString()),
+                          int.parse(context
+                              .watch<ETHProvider>()
+                              .currentChainID
+                              .toString()),
                       orElse: (() => 'Null')),
                   items: EnvironmentVariables.listNetwork
                       .map<DropdownMenuItem<String>>((String value) {
@@ -52,20 +52,18 @@ Widget settings(BuildContext context) {
                     );
                   }).toList(),
                   onChanged: (newNetwork) {
-                    Provider.of<ETHProvider>(context, listen: false)
+                    context
+                        .read<ETHProvider>()
                         .changeNetwork(newNetwork.toString());
-                    Provider.of<ETHProvider>(context, listen: false)
-                        .getTransactionHistory(
-                            Provider.of<ETHProvider>(context, listen: false)
-                                .addressfromString,
-                            EnvironmentVariables.listChainIDMap.keys.firstWhere(
-                                (element) =>
-                                    EnvironmentVariables
-                                        .listChainIDMap[element] ==
-                                    int.parse(Provider.of<ETHProvider>(context,
-                                            listen: false)
-                                        .currentChainID
-                                        .toString())));
+                    context.read<ETHProvider>().getTransactionHistory(
+                        context.read<ETHProvider>().addressfromString,
+                        EnvironmentVariables.listChainIDMap.keys.firstWhere(
+                            (element) =>
+                                EnvironmentVariables.listChainIDMap[element] ==
+                                int.parse(context
+                                    .read<ETHProvider>()
+                                    .currentChainID
+                                    .toString())));
                   });
             },
           ),
@@ -79,8 +77,7 @@ Widget settings(BuildContext context) {
           TextField(
             onSubmitted: (value) {
               if (true) {
-                Provider.of<ETHProvider>(context, listen: false)
-                    .getReceiverBalance(value);
+                context.read<ETHProvider>().getReceiverBalance(value);
               }
             },
             decoration: const InputDecoration(
@@ -91,7 +88,7 @@ Widget settings(BuildContext context) {
           Consumer<ETHProvider>(
             builder: (context, value, child) {
               return Text(
-                  'Balance: ${Provider.of<ETHProvider>(context, listen: true).receiverBalance}',
+                  'Balance: ${context.watch<ETHProvider>().receiverBalance}',
                   style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

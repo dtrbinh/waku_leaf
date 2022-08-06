@@ -15,14 +15,12 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
-    Provider.of<ETHProvider>(context, listen: false).getBalance();
-    Provider.of<ETHProvider>(context, listen: false).getTransactionHistory(
-        Provider.of<ETHProvider>(context, listen: false).addressfromString,
+    context.read<ETHProvider>().getBalance();
+    context.read<ETHProvider>().getTransactionHistory(
+        context.read<ETHProvider>().addressfromString,
         EnvironmentVariables.listChainIDMap.keys.firstWhere((element) =>
             EnvironmentVariables.listChainIDMap[element] ==
-            int.parse(Provider.of<ETHProvider>(context, listen: false)
-                .currentChainID
-                .toString())));
+            int.parse(context.read<ETHProvider>().currentChainID.toString())));
     //Provider.of<MetaMaskProvider>(context, listen: false).autoRefresh();
     super.initState();
   }
@@ -82,8 +80,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             const SizedBox(height: 20),
                             Consumer<ETHProvider>(
                               builder: (context, value, child) {
-                                return Provider.of<ETHProvider>(context,
-                                            listen: true)
+                                return context
+                                        .watch<ETHProvider>()
                                         .isLoadingBalance
                                     ? const CircularProgressIndicator()
                                     : Row(
@@ -91,8 +89,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            Provider.of<ETHProvider>(context,
-                                                    listen: false)
+                                            context
+                                                .read<ETHProvider>()
                                                 .currentBalance
                                                 .toStringAsFixed(8),
                                             style: const TextStyle(
@@ -107,11 +105,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               size: 40,
                                             ),
                                             onPressed: () {
-                                              Provider.of<ETHProvider>(context,
-                                                      listen: false)
+                                              context
+                                                  .read<ETHProvider>()
                                                   .changeLoadingStatus(true);
-                                              Provider.of<ETHProvider>(context,
-                                                      listen: false)
+                                              context
+                                                  .read<ETHProvider>()
                                                   .getBalance();
                                             },
                                           )
@@ -127,8 +125,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              Provider.of<DashBoardProvider>(context,
-                                      listen: false)
+                              context
+                                  .read<DashBoardProvider>()
                                   .setCurrentSelection(0);
                             },
                             child: const Text('Home'),
@@ -136,8 +134,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           const SizedBox(width: 40),
                           ElevatedButton(
                             onPressed: () {
-                              Provider.of<DashBoardProvider>(context,
-                                      listen: false)
+                              context
+                                  .read<DashBoardProvider>()
                                   .setCurrentSelection(1);
                             },
                             child: const Text('Send ETH'),
@@ -145,8 +143,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           const SizedBox(width: 40),
                           ElevatedButton(
                             onPressed: () {
-                              Provider.of<DashBoardProvider>(context,
-                                      listen: false)
+                              context
+                                  .read<DashBoardProvider>()
                                   .setCurrentSelection(2);
                             },
                             child: const Text('Settings'),
@@ -157,8 +155,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Consumer<DashBoardProvider>(
                         builder: (context, value, child) {
                           return Container(
-                            child: Provider.of<DashBoardProvider>(context,
-                                    listen: true)
+                            child: context
+                                .watch<DashBoardProvider>()
                                 .getBody(context),
                           );
                         },

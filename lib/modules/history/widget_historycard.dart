@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -23,9 +22,7 @@ Widget historyCard(Result transaction, BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            transaction.to ==
-                    Provider.of<ETHProvider>(context, listen: false)
-                        .addressfromString
+            transaction.to == context.read<ETHProvider>().addressfromString
                 ? const Text(
                     'IN',
                     style: TextStyle(

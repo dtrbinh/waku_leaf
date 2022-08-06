@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wakucoin/core/constants.dart';
-import 'package:wakucoin/data/models/transaction_history.dart';
 import 'package:wakucoin/modules/history/widget_historycard.dart';
 
 import '../../data/provider/eth_provider.dart';
@@ -27,17 +26,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Provider.of<ETHProvider>(context, listen: false)
-                    .getTransactionHistory(
-                        Provider.of<ETHProvider>(context, listen: false)
-                            .addressfromString,
-                        EnvironmentVariables.listChainIDMap.keys.firstWhere(
-                            (element) =>
-                                EnvironmentVariables.listChainIDMap[element] ==
-                                int.parse(Provider.of<ETHProvider>(context,
-                                        listen: false)
-                                    .currentChainID
-                                    .toString())));
+                context.read<ETHProvider>().getTransactionHistory(
+                    context.read<ETHProvider>().addressfromString,
+                    EnvironmentVariables.listChainIDMap.keys.firstWhere(
+                        (element) =>
+                            EnvironmentVariables.listChainIDMap[element] ==
+                            int.parse(context
+                                .read<ETHProvider>()
+                                .currentChainID
+                                .toString())));
               },
               icon: const Icon(Icons.refresh))
         ],
@@ -45,7 +42,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: Consumer<ETHProvider>(
         builder: (context, value, child) {
           return ListView(
-              children: Provider.of<ETHProvider>(context, listen: true)
+              children: context
+                  .watch<ETHProvider>()
                   .transactionHistory!
                   .result
                   .map<Widget>((e) => historyCard(e, context))

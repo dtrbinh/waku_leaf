@@ -163,6 +163,11 @@ class ETHProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getPendingTransaction(String address, String network) async {
+
+    
+  }
+
   void reset() {
     signInSuccess = false;
     isLoadingBalance = true;

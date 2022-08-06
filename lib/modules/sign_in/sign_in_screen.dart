@@ -71,7 +71,8 @@ class _SignInScreenState extends State<SignInScreen> {
               },
               onSubmitted: (value) {
                 if (value.length == 64) {
-                  debugPrint(Provider.of<ETHProvider>(context, listen: false)
+                  debugPrint(context
+                      .read<ETHProvider>()
                       .getCredentials(value)
                       .toString());
                   Navigator.push(
@@ -87,7 +88,8 @@ class _SignInScreenState extends State<SignInScreen> {
           ElevatedButton(
               onPressed: () {
                 if (privatekey.length == 64) {
-                  debugPrint(Provider.of<ETHProvider>(context, listen: false)
+                  debugPrint(context
+                      .read<ETHProvider>()
                       .getCredentials(privatekey)
                       .toString());
                   Navigator.push(

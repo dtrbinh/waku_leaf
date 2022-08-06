@@ -36,14 +36,12 @@ Widget sendETH(BuildContext context) {
             // ! TODO: Check valid address input
             onChanged: (value) {
               if (true) {
-                Provider.of<ETHProvider>(context, listen: false)
-                    .receiverAddress = value;
+                context.read<ETHProvider>().receiverAddress = value;
               }
             },
             onSubmitted: (value) {
               if (true) {
-                Provider.of<ETHProvider>(context, listen: false)
-                    .receiverAddress = value;
+                context.read<ETHProvider>().receiverAddress = value;
               }
             },
           ),
@@ -55,15 +53,13 @@ Widget sendETH(BuildContext context) {
             onChanged: (value) {
               // ! TODO: check if value <= balance
               if (true) {
-                Provider.of<ETHProvider>(context, listen: false).amount =
-                    double.parse(value);
+                context.read<ETHProvider>().amount = double.parse(value);
               }
             },
             onSubmitted: (value) {
               // ! TODO: check if value <= balance
               if (value != '') {
-                Provider.of<ETHProvider>(context, listen: false).amount =
-                    double.parse(value);
+                context.read<ETHProvider>().amount = double.parse(value);
               }
             },
           ),
@@ -73,10 +69,9 @@ Widget sendETH(BuildContext context) {
             children: [
               ElevatedButton(
                   onPressed: () {
-                    Provider.of<ETHProvider>(context, listen: false)
-                        .estimateTotalFee(
-                            Provider.of<ETHProvider>(context, listen: false)
-                                .amount);
+                    context
+                        .read<ETHProvider>()
+                        .estimateTotalFee(context.read<ETHProvider>().amount);
                     showDialog(
                         context: context,
                         builder: (context) {
@@ -92,12 +87,12 @@ Widget sendETH(BuildContext context) {
                                   const Text(
                                       'Are you sure to send this transaction?'),
                                   Text(
-                                    'Receiver: ${Provider.of<ETHProvider>(context, listen: true).receiverAddress}',
+                                    'Receiver: ${context.watch<ETHProvider>().receiverAddress}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    'Amount: ${Provider.of<ETHProvider>(context, listen: true).amount}',
+                                    'Amount: ${context.watch<ETHProvider>().amount}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -105,7 +100,7 @@ Widget sendETH(BuildContext context) {
                                   Consumer<ETHProvider>(
                                     builder: (context, value, child) {
                                       return Text(
-                                        'Transaction fee: ${Provider.of<ETHProvider>(context, listen: true).totalFee / BigInt.from(pow(10, 18))}.',
+                                        'Transaction fee: ${context.watch<ETHProvider>().totalFee / BigInt.from(pow(10, 18))}.',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red),
@@ -128,20 +123,16 @@ Widget sendETH(BuildContext context) {
                                   style: TextStyle(color: Colors.red),
                                 ),
                                 onPressed: () {
-                                  debugPrint(Provider.of<ETHProvider>(context,
-                                          listen: false)
+                                  debugPrint(context
+                                      .read<ETHProvider>()
                                       .sendETH(
-                                          Provider.of<ETHProvider>(context,
-                                                  listen: false)
+                                          context
+                                              .read<ETHProvider>()
                                               .receiverAddress,
-                                          Provider.of<ETHProvider>(context,
-                                                  listen: false)
-                                              .amount)
+                                          context.read<ETHProvider>().amount)
                                       .toString());
                                   FocusScope.of(context).unfocus();
-                                  Provider.of<ETHProvider>(context,
-                                          listen: false)
-                                      .resetReceiver();
+                                  context.read<ETHProvider>().resetReceiver();
                                   Navigator.pop(context);
                                 },
                               ),
@@ -156,11 +147,8 @@ Widget sendETH(BuildContext context) {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          Provider.of<ETHProvider>(context, listen: false)
-                              .estimateTotalFee(Provider.of<ETHProvider>(
-                                      context,
-                                      listen: false)
-                                  .currentBalance);
+                          context.read<ETHProvider>().estimateTotalFee(
+                              context.read<ETHProvider>().currentBalance);
                           return AlertDialog(
                             title: const Text(
                               'Confirm',
@@ -176,12 +164,12 @@ Widget sendETH(BuildContext context) {
                                       'Are you sure to send this transaction?'),
                                   const SizedBox(height: 5),
                                   Text(
-                                    'Receiver: ${Provider.of<ETHProvider>(context, listen: false).receiverAddress}',
+                                    'Receiver: ${context.read<ETHProvider>().receiverAddress}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    'Amount: ${Provider.of<ETHProvider>(context, listen: false).currentBalance}',
+                                    'Amount: ${context.read<ETHProvider>().currentBalance}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -189,7 +177,7 @@ Widget sendETH(BuildContext context) {
                                   Consumer(
                                     builder: (context, value, child) {
                                       return Text(
-                                        'Transaction fee: ${Provider.of<ETHProvider>(context, listen: true).totalFee / BigInt.from(pow(10, 18))}.',
+                                        'Transaction fee: ${context.watch<ETHProvider>().totalFee / BigInt.from(pow(10, 18))}.',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red),
@@ -199,7 +187,7 @@ Widget sendETH(BuildContext context) {
                                   Consumer(
                                     builder: (context, value, child) {
                                       return Text(
-                                        'Final amoumt: ${Provider.of<ETHProvider>(context, listen: true).finalValue / BigInt.from(pow(10, 18))}.',
+                                        'Final amoumt: ${context.watch<ETHProvider>().finalValue / BigInt.from(pow(10, 18))}.',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red),
@@ -222,20 +210,18 @@ Widget sendETH(BuildContext context) {
                                   style: TextStyle(color: Colors.red),
                                 ),
                                 onPressed: () {
-                                  debugPrint(Provider.of<ETHProvider>(context,
-                                          listen: false)
+                                  debugPrint(context
+                                      .read<ETHProvider>()
                                       .sendAllETH(
-                                          Provider.of<ETHProvider>(context,
-                                                  listen: false)
+                                          context
+                                              .read<ETHProvider>()
                                               .receiverAddress,
-                                          Provider.of<ETHProvider>(context,
-                                                  listen: false)
+                                          context
+                                              .read<ETHProvider>()
                                               .currentBalance)
                                       .toString());
                                   FocusScope.of(context).unfocus();
-                                  Provider.of<ETHProvider>(context,
-                                          listen: false)
-                                      .resetReceiver();
+                                  context.read<ETHProvider>().resetReceiver();
                                   Navigator.pop(context);
                                 },
                               ),

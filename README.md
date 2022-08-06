@@ -1,4 +1,4 @@
-# wakucoin
+# Waku Leaf
 
 A new Flutter project.
 

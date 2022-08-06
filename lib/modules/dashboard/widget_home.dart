@@ -36,7 +36,7 @@ Widget home(BuildContext context) {
                   color: Colors.green)),
           const SizedBox(height: 20),
           Text(
-              'Chain ID: ${Provider.of<ETHProvider>(context, listen: false).currentChainID.toString()}',
+              'Chain ID: ${context.read<ETHProvider>().currentChainID.toString()}',
               style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -47,9 +47,8 @@ Widget home(BuildContext context) {
             children: [
               ElevatedButton(
                   onPressed: () {
-                    Provider.of<ETHProvider>(context, listen: false).reset();
-                    Provider.of<DashBoardProvider>(context, listen: false)
-                        .reset();
+                    context.read<ETHProvider>().reset();
+                    context.read<DashBoardProvider>().reset();
                     Navigator.push(context, CupertinoPageRoute(
                       builder: (context) {
                         return const SignInScreen();
@@ -60,18 +59,15 @@ Widget home(BuildContext context) {
               const SizedBox(width: 20),
               ElevatedButton(
                   onPressed: () {
-                    Provider.of<ETHProvider>(context, listen: false)
-                        .getTransactionHistory(
-                            Provider.of<ETHProvider>(context, listen: false)
-                                .addressfromString,
-                            EnvironmentVariables.listChainIDMap.keys.firstWhere(
-                                (element) =>
-                                    EnvironmentVariables
-                                        .listChainIDMap[element] ==
-                                    int.parse(Provider.of<ETHProvider>(context,
-                                            listen: false)
-                                        .currentChainID
-                                        .toString())));
+                    context.read<ETHProvider>().getTransactionHistory(
+                        context.read<ETHProvider>().addressfromString,
+                        EnvironmentVariables.listChainIDMap.keys.firstWhere(
+                            (element) =>
+                                EnvironmentVariables.listChainIDMap[element] ==
+                                int.parse(context
+                                    .read<ETHProvider>()
+                                    .currentChainID
+                                    .toString())));
                     Navigator.push(context, CupertinoPageRoute(
                       builder: (context) {
                         return const HistoryScreen();
