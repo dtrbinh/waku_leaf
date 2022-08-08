@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -5,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:wakucoin/data/provider/dashboard_provider.dart';
 import 'package:wakucoin/data/provider/eth_provider.dart';
 import 'package:wakucoin/modules/sign_in/sign_in_screen.dart';
-
+ 
 void main() {
   // * Init splash screen
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +22,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => ETHProvider()),
       ChangeNotifierProvider(create: (_) => DashBoardProvider()),
     ],
-    child: const MyApp(),
+    child: 
+    const MyApp(),
     // * Preview UI on diffirent devices
     // DevicePreview(
     //   enabled: !kReleaseMode,
@@ -48,7 +51,8 @@ class _MyAppState extends State<MyApp> {
       // useInheritedMediaQuery: true,
       // locale: DevicePreview.locale(context),
       // builder: DevicePreview.appBuilder,
-      //darkTheme: ThemeData.dark(),
+      // darkTheme: ThemeData.dark(),
+
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
